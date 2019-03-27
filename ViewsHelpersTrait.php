@@ -323,7 +323,9 @@ trait ViewsHelpersTrait
 
 	    if(empty($url) && !empty(Yii::$app->request->referrer)) {
 		    $url = Yii::$app->request->referrer;
-	    } elseif (empty($url) && empty(Yii::$app->request->referrer)) {
+	    }
+
+	    if (empty($url) && empty(Yii::$app->request->referrer)) {
 	    	$url = ['index'];
 	    }
 
@@ -367,6 +369,18 @@ trait ViewsHelpersTrait
     }
 
 	/**
+	 * Return action send button
+	 *
+	 * @param array $url
+	 *
+	 * @return string
+	 */
+	public function getDownloadButton(array $url = ['download'])
+	{
+		return $this->getStandardButton('fa fa-download text-blue', Yii::t('traits','Download'), $url, ['class' => 'btn btn-mini btn-send']);
+	}
+
+	/**
 	 * Return standard button
 	 *
 	 * @param string $icon
@@ -383,6 +397,24 @@ trait ViewsHelpersTrait
                     Html::a('<i class="'.$icon.'"></i>', $url , $aClass).'
                     <div>'.$title.'</div>
                 </div>';
+    }
+
+	/**
+	 * Return Modal javascript
+	 *
+	 * @return string
+	 */
+	public function getModalJavascript()
+    {
+    	return '$(function(){
+			// changed id to class
+			$(\'.modalButton\').click(function (){
+				$.get($(this).attr(\'href\'), function(data) {
+					$(\'#modal\').modal(\'show\').find(\'#modalContent\').html(data)
+				});
+				return false;
+			});
+		});';
     }
 
     /**
